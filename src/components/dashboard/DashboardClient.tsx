@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { EventList } from "./EventList";
 import { DynamicPublicMap } from "@/components/map/DynamicPublicMap";
 import { EventDetail } from "./EventDetail";
+import { EventShareDialog } from "./EventShareDialog";
 import type { EventPanelMode } from "./EventEngagementPanel";
 import { NotificationCenter, StoredDangerNotification } from "./NotificationCenter";
 import { EventAudioPlayer, EventAudioPlayerHandle } from "./EventAudioPlayer";
@@ -68,6 +69,8 @@ export function DashboardClient({ initialEvents }: { initialEvents: PublicSoundE
   // Local state for immediate typing
   const [searchValue, setSearchValue] = useState(filters.search || "");
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [sharedEvent, setSharedEvent] = useState<PublicSoundEventDTO | null>(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const [storedNotifications, setStoredNotifications] = useState<StoredDangerNotification[]>([]);
   const storedNotificationsRef = useRef<StoredDangerNotification[]>([]);
   const pendingLocationCheck = useRef(false);
@@ -213,6 +216,11 @@ export function DashboardClient({ initialEvents }: { initialEvents: PublicSoundE
     () => initialEvents.find(e => e.slug === selectedSlug) || null,
     [initialEvents, selectedSlug]
   );
+
+  const openShareDialog = useCallback((event: PublicSoundEventDTO) => {
+    setSharedEvent(event);
+    setIsShareOpen(true);
+  }, []);
 
   const hasActiveFilters = Object.keys(filters).length > 0;
 
@@ -443,6 +451,14 @@ export function DashboardClient({ initialEvents }: { initialEvents: PublicSoundE
           userLocation={userLoc}
           panelMode={selectedPanelMode}
           onPanelModeChange={(panel) => updateFilters({ panel })}
+          isShareOpen={isShareOpen}
+          onShare={openShareDialog}
+        />
+
+        <EventShareDialog
+          event={sharedEvent}
+          open={isShareOpen}
+          onOpenChange={setIsShareOpen}
         />
 
         {/* MOBILE BOTTOM TAB — toggle Peta/Daftar */}

@@ -206,6 +206,41 @@
     animation: motion-fade-out var(--motion-duration-fast) ease-in both;
   }
 
+  .motion-share-overlay {
+    -webkit-backdrop-filter: blur(18px) saturate(0.9);
+    backdrop-filter: blur(18px) saturate(0.9);
+    will-change: opacity, backdrop-filter;
+  }
+
+  .motion-share-overlay[data-state="open"] {
+    animation: motion-share-overlay-in var(--motion-duration-slow) var(--motion-ease-out) both;
+  }
+
+  .motion-share-overlay[data-state="closed"] {
+    animation: motion-share-overlay-out var(--motion-duration-base) ease-in both;
+  }
+
+  .motion-share-dialog {
+    background-color: var(--popover);
+    transform-origin: center;
+    will-change: opacity, transform, filter;
+  }
+
+  @supports ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    .motion-share-dialog {
+      background-color: var(--glass-bg);
+    }
+  }
+
+  .motion-share-dialog[data-state="open"] {
+    animation: motion-share-dialog-in var(--motion-duration-slow) var(--motion-ease-spring) both;
+  }
+
+  .motion-share-dialog[data-state="closed"] {
+    animation: motion-share-dialog-out var(--motion-duration-base) var(--motion-ease-out) both;
+    pointer-events: none;
+  }
+
   .motion-dialog[data-state="open"] {
     animation: motion-dialog-in var(--motion-duration-slow) var(--motion-ease-spring) both;
   }
@@ -333,6 +368,68 @@
 
   to {
     opacity: 0;
+  }
+}
+
+@keyframes motion-share-overlay-in {
+  0% {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0) saturate(1);
+    backdrop-filter: blur(0) saturate(1);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(18px) saturate(0.9);
+    backdrop-filter: blur(18px) saturate(0.9);
+  }
+}
+
+@keyframes motion-share-overlay-out {
+  0% {
+    opacity: 1;
+    -webkit-backdrop-filter: blur(18px) saturate(0.9);
+    backdrop-filter: blur(18px) saturate(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    -webkit-backdrop-filter: blur(0) saturate(1);
+    backdrop-filter: blur(0) saturate(1);
+  }
+}
+
+@keyframes motion-share-dialog-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.88);
+    filter: blur(6px);
+  }
+
+  72% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.018);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes motion-share-dialog-out {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -47%) scale(0.94);
+    filter: blur(4px);
   }
 }
 

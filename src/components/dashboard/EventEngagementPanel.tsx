@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { MessageCircle, ThumbsUp, X } from "lucide-react";
+import { MessageCircle, Share2, ThumbsUp, X } from "lucide-react";
 import type { PublicSoundEventDTO } from "@/server/dal/event";
 import { formatCompactCount } from "@/lib/engagement";
 import { useEventEngagement } from "@/hooks/useEventEngagement";
@@ -15,12 +15,14 @@ export function EventEngagementPanel({
   event,
   mode,
   onModeChange,
+  onShare,
   onClose,
   information,
 }: {
   event: PublicSoundEventDTO;
   mode: EventPanelMode;
   onModeChange: (mode: EventPanelMode) => void;
+  onShare: () => void;
   onClose: () => void;
   information: ReactNode;
 }) {
@@ -34,6 +36,14 @@ export function EventEngagementPanel({
             {event.sourcePlatform}
           </Badge>
           <div className="flex items-center gap-1">
+            <button
+              type="button"
+              onClick={onShare}
+              aria-label={`Bagikan acara ${event.title}`}
+              className="motion-control flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+            >
+              <Share2 className="h-5 w-5" aria-hidden="true" />
+            </button>
             <button
               type="button"
               onClick={engagement.toggleLike}

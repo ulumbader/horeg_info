@@ -30,6 +30,7 @@ Format mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ### Added
 
+- Menambahkan tombol share pada panel rincian acara publik dengan dialog glass terpusat, blur layar penuh, animasi masuk/keluar bergaya iOS, focus trap, tombol tutup, target WhatsApp/Facebook/Instagram/X/Telegram, serta copy URL acara yang stabil. Pada mobile, bottom sheet rincian ditutup sementara selama dialog aktif dan dipulihkan otomatis setelah dialog ditutup; Instagram menggunakan native share sheet dengan fallback salin tautan.
 - Menambahkan konfigurasi open-source dan GitHub untuk nama proyek **SOUND HOREG.INFO**: MIT License, panduan kontribusi, kebijakan keamanan, kode etik, issue forms, pull request template, Dependabot, atribut/editor lintas platform, serta panduan publikasi repository tanpa membuat remote atau melakukan upload.
 - Menambahkan workflow `.github/workflows/ci.yml` read-only untuk menjalankan lint, typecheck, Vitest, dan production build pada push atau pull request tanpa deployment maupun akses database production.
 - Menambahkan engagement per acara melalui migration `20260715090000_event_engagement`: like idempotent per browser, komentar anonim plain-text, label komentar ADMIN, pagination komentar, hitungan publik, serta panel komentar responsif yang menggantikan informasi acara melalui `?panel=comments`.

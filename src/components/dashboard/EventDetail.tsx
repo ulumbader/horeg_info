@@ -19,11 +19,21 @@ interface EventDetailProps {
   userLocation?: { latitude: number; longitude: number } | null;
   panelMode: EventPanelMode;
   onPanelModeChange: (mode: EventPanelMode) => void;
+  isShareOpen: boolean;
+  onShare: (event: PublicSoundEventDTO) => void;
 }
 
 const DETAIL_EXIT_DURATION_MS = 260;
 
-export function EventDetail({ event: selectedEvent, onClose, userLocation, panelMode, onPanelModeChange }: EventDetailProps) {
+export function EventDetail({
+  event: selectedEvent,
+  onClose,
+  userLocation,
+  panelMode,
+  onPanelModeChange,
+  isShareOpen,
+  onShare,
+}: EventDetailProps) {
   const [retainedEvent, setRetainedEvent] = useState(selectedEvent);
   const [isCompactViewport, setIsCompactViewport] = useState(false);
   const event = selectedEvent ?? retainedEvent;
@@ -287,6 +297,7 @@ export function EventDetail({ event: selectedEvent, onClose, userLocation, panel
       event={event}
       mode={panelMode}
       onModeChange={onPanelModeChange}
+      onShare={() => onShare(event)}
       onClose={handleRequestClose}
       information={informationContent}
     />
@@ -302,7 +313,13 @@ export function EventDetail({ event: selectedEvent, onClose, userLocation, panel
         <div className="w-96 h-full">{detailContent}</div>
       </div>
 
-      <Dialog.Root modal={false} open={isOpen && isCompactViewport} onOpenChange={(open) => { if (!open && isOpen) handleRequestClose(); }}>
+      <Dialog.Root
+        modal={false}
+        open={isOpen && isCompactViewport && !isShareOpen}
+        onOpenChange={(open) => {
+          if (!open && isOpen && !isShareOpen) handleRequestClose();
+        }}
+      >
         <Dialog.Portal>
           {/* Overlay dihilangkan agar background peta tidak blur dan tetap bisa diklik */}
           <Dialog.Content
