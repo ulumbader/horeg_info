@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/playwright-report/
+/test-results/
+/.tmp/
 
 # next.js
 /.next/
@@ -20,9 +23,22 @@
 # production
 /build
 
+# Serwist generated output
+/public/sw.js
+/public/sw.js.map
+/public/swe-worker-*.js
+/public/swe-worker-*.js.map
+
 # misc
 .DS_Store
+Thumbs.db
 *.pem
+*.log
+.eslintcache
+
+# Local planning and source assets not intended for the public repository
+/GEMINI_IMPLEMENTATION_PROMPTS.md
+/hrg_logo (1).svg
 
 # debug
 npm-debug.log*
@@ -32,6 +48,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +56,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# Database
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Prisma
+src/generated/prisma

@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SOUND HOREG.INFO
 
-## Getting Started
+SOUND HOREG.INFO adalah aplikasi open-source untuk memetakan acara sound horeg dan menampilkan estimasi zona dampak kebisingan. Aplikasi membantu masyarakat melihat jadwal acara, jarak dari lokasi pengguna, serta estimasi tingkat suara berdasarkan model propagasi sederhana.
 
-First, run the development server:
+> Hasil yang ditampilkan adalah estimasi, bukan pengukuran kebisingan aktual. Bangunan, topografi, cuaca, arah speaker, penghalang, dan kondisi lapangan tidak dimodelkan.
+
+## Fitur utama
+
+- Peta acara interaktif dengan marker dan zona estimasi 75/65/55 dB.
+- Filter acara mendatang, sedang berlangsung, dan telah lewat.
+- Pemeriksaan lokasi pengguna yang diproses hanya di browser.
+- Detail sumber acara, estimasi jarak, audio opsional, like, dan komentar anonim.
+- Panel admin tunggal untuk CRUD, publikasi, arsip, map picker, moderasi, dan audit.
+- Tema gelap/terang, tampilan responsif, dan dukungan PWA.
+
+## Teknologi
+
+- Next.js 16 App Router, React 19, dan TypeScript strict.
+- Tailwind CSS, Radix UI, Lucide, dan `next-themes`.
+- React Leaflet, Leaflet, dan OpenStreetMap.
+- Prisma ORM dengan Supabase PostgreSQL.
+- Better Auth untuk autentikasi admin tunggal.
+- Vitest dan Playwright.
+
+## Menjalankan secara lokal
+
+Prasyarat:
+
+- Node.js 20 atau lebih baru.
+- npm.
+- Database PostgreSQL development yang terisolasi.
+
+Salin `.env.example` menjadi `.env.local`, lalu isi koneksi dan secret lokal. Jangan gunakan database production untuk development atau pengujian.
 
 ```bash
+npm ci
+npm run db:generate
+npm run db:migrate:deploy
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikasi tersedia di `http://localhost:3000`. Admin pertama dibuat sekali melalui:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run bootstrap
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Hapus `ADMIN_BOOTSTRAP_PASSWORD` dari environment setelah bootstrap berhasil. Pendaftaran publik selalu dinonaktifkan.
 
-## Learn More
+## Pemeriksaan kualitas
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run typecheck
+npm run test:run
+npm run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Integration test membutuhkan `TEST_DATABASE_URL` dan `TEST_DIRECT_URL` dengan schema PostgreSQL terisolasi berawalan `vitest`. E2E membutuhkan `E2E_DATABASE_URL` dan `E2E_DIRECT_URL` yang tidak mengarah ke production.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Dokumentasi
 
-## Deploy on Vercel
+- [Model estimasi kebisingan](docs/NOISE_MODEL.md)
+- [Database](docs/DATABASE.md)
+- [Autentikasi](docs/AUTH.md)
+- [Deployment Vercel dan Supabase](docs/DEPLOY_VERCEL.md)
+- [Persiapan repository GitHub](docs/GITHUB_SETUP.md)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Berkontribusi dan keamanan
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Kontribusi dipersilakan. Baca [CONTRIBUTING.md](CONTRIBUTING.md) dan [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) sebelum membuka pull request.
+
+Jangan melaporkan kerentanan atau membagikan secret melalui issue publik. Ikuti [SECURITY.md](SECURITY.md).
+
+## Lisensi
+
+Kode proyek tersedia di bawah [MIT License](LICENSE).

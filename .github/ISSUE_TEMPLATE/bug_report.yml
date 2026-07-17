@@ -1,0 +1,62 @@
+name: Laporan bug
+description: Laporkan perilaku aplikasi yang salah atau tidak sesuai.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Terima kasih telah membantu SOUND HOREG.INFO. Jangan sertakan credential, data pribadi, atau detail kerentanan keamanan.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pemeriksaan awal
+      options:
+        - label: Saya sudah mencari issue serupa.
+          required: true
+        - label: Ini bukan laporan kerentanan keamanan.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah
+      description: Jelaskan perilaku yang terjadi dan dampaknya.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Langkah reproduksi
+      placeholder: |
+        1. Buka ...
+        2. Pilih ...
+        3. Terjadi ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang diharapkan
+    validations:
+      required: true
+  - type: dropdown
+    id: viewport
+    attributes:
+      label: Perangkat
+      options:
+        - Desktop
+        - Tablet
+        - Mobile
+        - Lebih dari satu
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser dan versi
+      placeholder: Chrome 126, Firefox 128, Safari 17, dan sebagainya
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Bukti tambahan
+      description: Tambahkan screenshot atau log yang sudah disanitasi. Jangan menyertakan token, cookie, connection string, atau koordinat pengguna.

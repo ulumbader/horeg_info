@@ -1,0 +1,174 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model SoundEvent {
+  id                String         @id @default(cuid())
+  slug              String         @unique
+  title             String
+  summary           String?
+  description       String?
+  venueName         String?
+  address           String
+  district          String?
+  city              String
+  province          String
+  latitude          Float
+  longitude         Float
+  sourceDb          Int
+  sourcePlatform    String
+  sourceUrl         String
+  sourceAccount     String?
+  audioUrl          String?
+  audioTitle        String?
+  audioData         Bytes?
+  audioMimeType     String?
+  audioFileName     String?
+  audioSize         Int?
+  startAt           DateTime
+  endAt             DateTime
+  publicationStatus String // "DRAFT", "PUBLISHED", "ARCHIVED"
+  featured          Boolean        @default(false)
+  publishedAt       DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  comments          EventComment[]
+  likes             EventLike[]
+}
+
+enum CommentAuthorType {
+  ANONYMOUS
+  ADMIN
+}
+
+model EventComment {
+  id                 String            @id @default(cuid())
+  eventId            String
+  body               String            @db.VarChar(500)
+  authorType         CommentAuthorType
+  anonymousActorHash String?           @db.Char(64)
+  adminUserId        String?
+  clientRequestId    String?           @db.VarChar(64)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  editedAt           DateTime?
+  deletedAt          DateTime?
+  event              SoundEvent        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  adminUser          User?             @relation("AdminCommentAuthor", fields: [adminUserId], references: [id], onDelete: SetNull)
+
+  @@unique([anonymousActorHash, clientRequestId])
+  @@index([eventId, deletedAt, createdAt])
+  @@index([adminUserId])
+}
+
+model EventLike {
+  id        String     @id @default(cuid())
+  eventId   String
+  actorHash String     @db.Char(64)
+  createdAt DateTime   @default(now())
+  event     SoundEvent @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, actorHash])
+  @@index([eventId])
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  eventType   String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model AppSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id            String         @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+  adminComments EventComment[] @relation("AdminCommentAuthor")
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  date      String // "YYYY-MM-DD" for daily aggregation
+  count     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([path, date])
+}
+
+model ActiveVisitor {
+  id        String   @id // anonymous session ID from browser
+  userAgent String?
+  lastSeen  DateTime @default(now())
+  path      String   @default("/")
+
+  @@index([lastSeen])
+}

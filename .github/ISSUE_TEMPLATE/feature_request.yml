@@ -1,0 +1,37 @@
+name: Usulan fitur
+description: Usulkan peningkatan yang selaras dengan tujuan SOUND HOREG.INFO.
+title: "[Fitur]: "
+labels:
+  - enhancement
+body:
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Pemeriksaan awal
+      options:
+        - label: Saya sudah mencari issue atau proposal serupa.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Masalah pengguna
+      description: Masalah apa yang perlu diselesaikan dan siapa yang terdampak?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Solusi yang diusulkan
+      description: Jelaskan perilaku, alur, atau antarmuka yang diharapkan.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif
+      description: Solusi lain atau workaround yang sudah dipertimbangkan.
+  - type: textarea
+    id: considerations
+    attributes:
+      label: Privasi, keamanan, dan aksesibilitas
+      description: Jelaskan dampaknya, terutama jika melibatkan lokasi, autentikasi, database, atau peta.
