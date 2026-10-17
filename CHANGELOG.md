@@ -60,6 +60,9 @@ Format mengikuti prinsip [Keep a Changelog](https://keepachangelog.com/en/1.1.0/
 
 ### Fixed
 
+- Memperbaiki grafik kunjungan `/admin` yang hanya terlihat sebagai garis tipis karena tinggi persen batang tidak memiliki wadah dengan tinggi pasti; batang kini proporsional, angka harian terlihat tanpa hover, nilai nol tidak digambar sebagai kunjungan, dan tersedia ringkasan aksesibel serta pesan data kosong.
+- Menyamakan tanggal pencatatan dan rentang tujuh hari analitik dengan `Asia/Jakarta` (WIB), termasuk pergantian bulan/tahun, tanpa bergantung pada zona waktu server. Agregat historis tetap dipertahankan; data lama berbasis UTC tidak dapat dibagi ulang akurat karena waktu tiap kunjungan tidak disimpan. Tidak ada migration atau environment baru.
+- Menambahkan regresi analitik untuk batas tengah malam WIB, pengisian hari kosong, serta render grafik dengan CSS aktual pada empat viewport dan tema terang/gelap.
 - Mengecualikan service worker Serwist hasil generate dari ESLint dan memodelkan nilai awal `datetime-local` form acara sebagai input tanggal bertipe aman tanpa `any`, sehingga quality gate GitHub tidak gagal pada artefak generated atau cast form lama.
 - Memperbaiki kegagalan typecheck build pada halaman `/admin/events` akibat prop `title` yang tidak didukung tipe ikon Lucide untuk indikator musik pengiring.
 - Menambahkan deklarasi `data-scroll-behavior="smooth"` pada root layout agar navigasi Next.js 16 menangani global smooth scrolling tanpa warning runtime.

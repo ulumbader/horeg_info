@@ -16,33 +16,35 @@ const POLL_INTERVAL = 15_000; // 15 seconds
  * Mini bar chart rendered with pure CSS.
  * Shows the last 7 days of page views.
  */
-function MiniBarChart({ data }: { data: { date: string; count: number }[] }) {
+export function MiniBarChart({ data }: { data: { date: string; count: number }[] }) {
   const maxCount = Math.max(...data.map((d) => d.count), 1);
+  const summary = data.map((day) => `${day.date}: ${day.count.toLocaleString("id-ID")} kunjungan`).join("; ");
 
   return (
-    <div className="flex items-end gap-1.5 h-16 mt-3" role="img" aria-label="Grafik kunjungan 7 hari terakhir">
-      {data.map((day) => {
-        const heightPercent = (day.count / maxCount) * 100;
-        const dayLabel = new Date(day.date + "T00:00:00").toLocaleDateString("id-ID", { weekday: "short" });
-        return (
-          <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
-            <div className="w-full relative group">
-              <div
-                className="w-full rounded-t-sm bg-primary/70 hover:bg-primary transition-colors duration-150 min-h-[2px]"
-                style={{ height: `${Math.max(heightPercent, 3)}%` }}
-                title={`${dayLabel}: ${day.count} kunjungan`}
-              />
-              {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block z-10">
-                <div className="bg-popover text-popover-foreground text-[10px] px-1.5 py-0.5 rounded shadow-md whitespace-nowrap border">
-                  {day.count}
-                </div>
+    <div>
+      <div className="flex items-end gap-1.5 mt-3" role="img" aria-label={`Grafik kunjungan 7 hari terakhir (WIB). ${summary}`}>
+        {data.map((day) => {
+          const heightPercent = (day.count / maxCount) * 100;
+          const dayLabel = new Date(day.date + "T00:00:00").toLocaleDateString("id-ID", { weekday: "short" });
+          return (
+            <div key={day.date} className="min-w-0 flex-1 flex flex-col items-center gap-1">
+              <span className="text-[10px] text-muted-foreground tabular-nums break-all">{day.count.toLocaleString("id-ID")}</span>
+              {/* Percentage heights need a definite height on the immediate parent. */}
+              <div className="w-full h-16 flex items-end">
+                <div
+                  className="w-full rounded-t-sm bg-primary/70 hover:bg-primary transition-colors duration-150"
+                  style={{ height: `${heightPercent}%`, minHeight: day.count > 0 ? 2 : 0 }}
+                  title={`${day.date} (WIB): ${day.count.toLocaleString("id-ID")} kunjungan`}
+                />
               </div>
+              <span className="text-[10px] text-muted-foreground leading-none">{dayLabel}</span>
             </div>
-            <span className="text-[10px] text-muted-foreground leading-none">{dayLabel}</span>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+      {data.every((day) => day.count === 0) && (
+        <p className="text-xs text-muted-foreground mt-2">Belum ada kunjungan dalam 7 hari terakhir.</p>
+      )}
     </div>
   );
 }
@@ -147,7 +149,7 @@ export function AnalyticsWidgets() {
         <div className="flex flex-row items-center justify-between pb-1">
           <h3 className="tracking-tight text-sm font-medium flex items-center gap-2">
             <BarChart3 className="w-4 h-4 text-primary" />
-            Tren Kunjungan 7 Hari
+            Tren Kunjungan 7 Hari (WIB)
           </h3>
           <TrendingUp className="w-4 h-4 text-muted-foreground" />
         </div>

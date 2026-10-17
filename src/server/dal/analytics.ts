@@ -1,12 +1,21 @@
 import { prisma } from "@/lib/prisma";
 import "server-only";
 
+function getAnalyticsDate(date: Date): string {
+  return date.toLocaleDateString("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
 /**
  * Record a page view for the given path on today's date.
  * Uses upsert to increment the daily counter atomically.
  */
 export async function recordPageView(path: string): Promise<void> {
-  const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+  const today = getAnalyticsDate(new Date());
 
   await prisma.pageView.upsert({
     where: { path_date: { path, date: today } },
@@ -53,13 +62,14 @@ export async function getOnlineVisitorCount(): Promise<number> {
  * Get page view statistics for admin dashboard.
  */
 export async function getPageViewStats() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getAnalyticsDate(new Date());
 
   // Generate last 7 days date strings
   const last7Days: string[] = [];
   for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
+    // Use the captured Jakarta calendar date, independent of the server timezone.
+    const d = new Date(`${today}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() - i);
     last7Days.push(d.toISOString().slice(0, 10));
   }
 
